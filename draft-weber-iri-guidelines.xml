@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc compact="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc strict="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="4"?>
+
+<rfc category="std" docName="draft-weber-iri-guidelines-00" ipr="trust200902">
+
+  <front>
+    <title abbrev="IRI Guidelines">Guidelines for Implementers of Internationalized Resource Identifiers (IRIs)</title>
+
+    <author initials="C." surname="Weber" fullname="Chris Weber">
+      <organization>Casaba Security</organization>
+      <address>
+        <postal>
+          <street>16625 Redmond Wa, Suite M348</street>
+          <city>Redmond</city>
+          <region>WA</region>
+          <code>98052</code>
+          <country>USA</country>
+        </postal>
+        <email>chris@lookout.net</email>
+      </address>
+    </author>
+    <author initials="P." surname="Saint-Andre" fullname="Peter Saint-Andre">
+      <organization>Cisco</organization>
+      <address>
+        <postal>
+          <street>1899 Wyknoop Street, Suite 600</street>
+          <city>Denver</city>
+          <region>CO</region>
+          <code>80202</code>
+          <country>USA</country>
+        </postal>
+        <phone>+1-303-308-3282</phone>
+        <email>psaintan@cisco.com</email>
+      </address>
+    </author>
+
+    <date month="June" day="15" year="2011"/>
+
+    <area>Applications</area>
+    <keyword>Internet-Draft</keyword>
+    <keyword>Uniform Resource Identifiers</keyword>
+    <keyword>Internationalized Resource Identifiers</keyword>
+    <keyword>internationalization</keyword>
+
+    <abstract>
+      <t>Some members of the implementation community have been confused about the rules and algorithms for processing Internationalized Resource Identifiers (IRIs).  This document claries these matters to improve interoperability.</t>
+    </abstract>
+  </front>
+
+  <middle>
+
+    <section title="Introduction" anchor="introduction">
+      <t>Some members of the implementation community have been confused about the rules and algorithms for processing Internationalized Resource Identifiers (IRIs).  This document claries these matters to improve interoperability.</t>
+    </section>
+
+    <section title="Parsing Unicode Strings into IRI Components" anchor="parse">
+      <t>To follow. This document will reference <xref target='BROWSERS'/> and <xref target='IRI'/>.</t>
+    </section>
+
+    <section title="Security Considerations" anchor="security">
+      <t>To follow.</t>
+    </section>
+
+    <section title="IANA Considerations" anchor="iana">
+      <t>This document has no actions for the IANA.</t>
+    </section>
+
+    <section title="Acknowledgements" anchor="acks">
+      <t>Thanks to Adam Barth, Martin Duerst, and Julian Reschke for their feedback.</t>
+    </section>
+
+  </middle>
+
+  <back>
+
+    <references title="Informative References">
+
+<reference anchor='BROWSERS'>
+<front>
+<title>How Browsers Process URLs</title>
+<author initials='A' surname='Barth' fullname='Adam Barth'>
+    <organization />
+</author>
+<date month='November' day='9' year='2010' />
+<abstract><t>This document contains a precise specification of how browsers process URLs.  The behavior specified in this document might or might not match any particular browser, but browsers might be well-served by adopting the behavior defined herein.Editorial Note (To be removed by RFC Editor)  If you have suggestions for improving this document, please send email to &lt;mailto:public-iri@w3.org>.  Further Working Group information is available from &lt;https://tools.ietf.org/wg/iri/>.</t></abstract>
+</front>
+<seriesInfo name='Internet-Draft' value='draft-abarth-url-00' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-abarth-url-00.txt' />
+</reference>
+
+<reference anchor='IRI'>
+<front>
+<title>Internationalized Resource Identifiers (IRIs)</title>
+<author initials='M' surname='Duerst' fullname='Martin Duerst'>
+    <organization />
+</author>
+<author initials='M' surname='Suignard' fullname='Michel Suignard'>
+    <organization />
+</author>
+<author initials='L' surname='Masinter' fullname='Larry Masinter'>
+    <organization />
+</author>
+<date month='March' day='29' year='2011' />
+<abstract><t>This document defines the Internationalized Resource Identifier (IRI) protocol element, as an extension of the Uniform Resource Identifier (URI).  An IRI is a sequence of characters from the Universal Character Set (Unicode/ISO 10646).  Grammar and processing rules are given for IRIs and related syntactic forms.  In addition, this document provides named additional rule sets for processing otherwise invalid IRIs, in a way that supports other specifications that wish to mandate common behavior for 'error' handling.  In particular, rules used in some XML languages (LEIRI) and web applications are given.  Defining IRI as new protocol element (rather than updating or extending the definition of URI) allows independent orderly transitions: other protocols and languages that use URIs must explicitly choose to allow IRIs.  Guidelines are provided for the use and deployment of IRIs and related protocol elements when revising protocols, formats, and software components that currently deal only with URIs.  RFC Editor: Please remove the next paragraph before publication.  This document is intended to update RFC 3987 and move towards IETF Draft Standard.  For discussion and comments on this draft, please join the IETF IRI WG by subscribing to the mailing list public-iri@w3.org.  For a list of open issues, please see the issue tracker of the WG at http://trac.tools.ietf.org/wg/iri/trac/report/1. For a list of individual edits, please see the change history at http://trac.tools.ietf.org/wg/iri/trac/log/draft-ietf-iri-3987bis.</t></abstract>
+</front>
+<seriesInfo name='Internet-Draft' value='draft-ietf-iri-3987bis-05' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-ietf-iri-3987bis-05.txt' />
+</reference>
+
+    </references>
+
+  </back>
+</rfc>

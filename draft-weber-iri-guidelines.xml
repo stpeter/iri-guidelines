@@ -59,8 +59,112 @@
       <t>Some members of the implementation community have been confused about the rules and algorithms for processing Internationalized Resource Identifiers (IRIs).  This document claries these matters to improve interoperability.</t>
     </section>
 
+    <section title="Sources" anchor="sources">
+      <t>This document makes reference to the following sources of information about the parsing of IRIs:</t>
+      <t>
+        <list style='hanging'>
+          <t hangText='1:'>Internationalized Resource Identifiers (IRIs) as specified in http://tools.ietf.org/html/draft-ietf-iri-3987bis-05 <xref target='1'/></t>
+          <t hangText='2:'>Parsing URLs for Fun and Profit, http://tools.ietf.org/html/draft-abarth-url-01 <xref target='2'/></t>
+          <t hangText='3:'>HTML Living Standard: URLs, http://www.whatwg.org/specs/web-apps/current-work/multipage/urls.html#urls <xref target='3'/></t>
+          <t hangText='4:'>Change proposal for ISSUE-56, http://lists.w3.org/Archives/Public/public-html/2010Jul/0036.html <xref target='4'/></t>
+          <t hangText='5:'>URIs, URLs, and URNs: Clarifications and Recommendations 1.0, http://www.w3.org/TR/uri-clarification/ <xref target='5'/></t>
+          <t hangText='6:'>Browser Security Handbook: Uniform Resource Locators, http://code.google.com/p/browsersec/wiki/Part1#Uniform_Resource_Locators <xref target='6'/></t>
+          <t hangText='7:'>BIDI URL Display, https://docs.google.com/document/d/1c8-svx7og0qBUfGBobw7LYfOcNeDVPYbNVMNpSqYCFo/edit?hl=en&pli=1 <xref target='7'/></t>
+        </list>
+      </t>
+    </section>
+
     <section title="Parsing Unicode Strings into IRI Components" anchor="parse">
-      <t>To follow. This document will reference <xref target='BROWSERS'/> and <xref target='IRI'/>.</t>
+      <t>This section describes the process of parsing a Unicode string into IRI components.</t>
+      <t>(TODO: This should address both valid and invalid arbitrary strings)</t>
+      <t>(TODO: describe error handling)</t>
+      <t>
+        <list style='numbers'>
+          <!-- STEP 1 -->
+          <t>
+            Action: Remove leading and trailing ^[whitespace | space characters | control characters] from the string.
+            <vspace/>
+            Result: Leading and trailing instances of space (U+0020), CR (U+000A), LF (U+000D), and TAB (U+0009) characters are removed.
+            <vspace/>
+            Reference: All referenced sources agree on this step.  See Section 7.2 of <xref target='1'/> for details.
+          </t>
+          <!-- STEP 2 -->
+          <t>
+            Action: If more than one reference allowed, split the string into separate strings on \s+, else look for embedded whitespace and either remove it or replace it with a single %20, depending on context.
+            <vspace/>
+            Reference: Mentioned only in <xref target='4'/>.
+          </t>
+          <!-- STEP 3 -->
+          <t>
+            Action: Determine if input string is in a Unicode-based character encoding such as UTF-8 or UTF-16.  If not in a Unicode-based encoding form, then transcode to UTF-8 (note: MUST be UTF-8).
+            <vspace/>
+            Reference: Mentioned only in Section 3.1 of <xref target='1'/>.
+          </t>
+          <!-- STEP 4 -->
+          <t>
+            Normalize the string using Unicode NFC.
+            <vspace/>
+            Reference: Mentioned only in Section 3.1 of <xref target='1'/>.
+          </t>
+          <!-- STEP 5 -->
+          <t>
+            Parse the IRI into its seven major components using rules defined by 3896 (using an algorithm equivalent to RFC3986 Appendix B) but with updated ABNF of 3987.
+            <vspace/>
+            Reference: Mentioned only in Section 3.2 of <xref target='1'/>.
+            <vspace/>
+            <!-- TODO -->
+            [TODO: This seems to be the primary area of concerns for HTML developers]
+            <vspace/>
+            In addition, perform the following additional steps where they exist...
+            <list style='symbols'>
+              <t>
+                SCHEME (i.e., scheme)
+                <vspace/>
+                [TODO The scheme should not be a part of this, correct? It should be pre-parsed.]
+              </t>
+              <t>
+                HOST (i.e., ireg-name)
+                <vspace/>
+                [TODO We need a MUST statement here]
+                <vspace/>
+                Given an input string ireg-part, SHOULD convert the ireg-part component to percent-encoding using step 6 below.
+                <vspace/>
+                [NOTE: MAY convert ireg-part to punycode.]
+                <vspace/>
+                [NOTE The HOST should not be altered for local intranet host names]
+              </t>
+              <t>PORT (i.e., port)</t>
+              <t>PATH (i.e., ipath)</t>
+              <t>
+                QUERY (i.e., iquery)
+                <vspace/>
+                Reference: See Section 3.5 of <xref target='1'/>.
+                <vspace/>
+((NOTE: SEE ISSUES LIST)) For compatibility with existing deployed HTTP infrastructure, the following special case applies for schemes "http" and "https" and IRIs whose origin has a document charset other than one which is UCS-based (e.g., UTF-8 or UTF-16).  In such a case, the "query" component of an IRI is mapped into a URI by using the document charset rather than UTF-8 as the binary representation before pct-encoding.  This mapping is not applied for any other scheme or component.
+              </t>
+              <t>FRAGMENT (i.e., ifragment)</t>
+              <t>AUTHORITY (i.e., iauthority)</t>
+            </list>
+          </t>
+          <!-- STEP 6 -->
+          <t>
+            Percent-encode IRI components (this is done for the sake of interoperability).  For each character which is not allowed anywhere in a valid URI, apply the following steps.
+            <vspace/>
+            Reference: See Section 3.5 of <xref target='1'/>.
+            <list style='symbols'>
+              <t>
+              Action: Convert to UTF-8, i.e., convert the character to a sequence of one or more octets using UTF-8 [RFC3629].
+              <vspace/>
+              [TODO: Necessary after step 3 above?)
+              </t>
+              <t>
+                Action: Percent-encode, i.e., convert each octet of this sequence to %HH, where HH is the hexadecimal notation of the octet value.
+              </t>
+            </list>
+          </t>
+        </list>
+      </t>
+      <t>At this point the IRI string and components should be canonicalized.</t>
     </section>
 
     <section title="Security Considerations" anchor="security">
@@ -81,21 +185,7 @@
 
     <references title="Informative References">
 
-<reference anchor='BROWSERS'>
-<front>
-<title>How Browsers Process URLs</title>
-<author initials='A' surname='Barth' fullname='Adam Barth'>
-    <organization />
-</author>
-<date month='November' day='9' year='2010' />
-<abstract><t>This document contains a precise specification of how browsers process URLs.  The behavior specified in this document might or might not match any particular browser, but browsers might be well-served by adopting the behavior defined herein.Editorial Note (To be removed by RFC Editor)  If you have suggestions for improving this document, please send email to &lt;mailto:public-iri@w3.org>.  Further Working Group information is available from &lt;https://tools.ietf.org/wg/iri/>.</t></abstract>
-</front>
-<seriesInfo name='Internet-Draft' value='draft-abarth-url-00' />
-<format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-abarth-url-00.txt' />
-</reference>
-
-<reference anchor='IRI'>
+<reference anchor='1'>
 <front>
 <title>Internationalized Resource Identifiers (IRIs)</title>
 <author initials='M' surname='Duerst' fullname='Martin Duerst'>
@@ -113,6 +203,77 @@
 <seriesInfo name='Internet-Draft' value='draft-ietf-iri-3987bis-05' />
 <format type='TXT'
         target='http://www.ietf.org/internet-drafts/draft-ietf-iri-3987bis-05.txt' />
+</reference>
+
+<reference anchor='2'>
+<front>
+<title>How Browsers Process URLs</title>
+<author initials='A' surname='Barth' fullname='Adam Barth'>
+    <organization />
+</author>
+<date month='April' day='23' year='2011' />
+<abstract><t>This document contains a precise specification of how browsers process URLs.  The behavior specified in this document might or might not match any particular browser, but browsers might be well-served by adopting the behavior defined herein.Editorial Note (To be removed by RFC Editor)  If you have suggestions for improving this document, please send email to &lt;mailto:public-iri@w3.org>.  Further Working Group information is available from &lt;https://tools.ietf.org/wg/iri/>.</t></abstract>
+</front>
+<seriesInfo name='Internet-Draft' value='draft-abarth-url-00' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-abarth-url-00.txt' />
+</reference>
+
+<reference anchor='3' target='http://www.whatwg.org/specs/web-apps/current-work/multipage/urls.html#urls'>
+<front>
+<title>HTML Living Standard: URLs</title>
+<author initials='I.' surname='Hickson' fullname='Ian Hickson'>
+    <organization>Google</organization>
+</author>
+<date year='2011'/>
+</front>
+<seriesInfo name='WHATWG' value='?' />
+<format type='HTML' target='http://www.whatwg.org/specs/web-apps/current-work/multipage/urls.html#urls'/>
+</reference>
+
+<reference anchor='4' target='http://lists.w3.org/Archives/Public/public-html/2010Jul/0036.html'>
+<front>
+<title>Change proposal for ISSUE-56</title>
+<author initials='R.' surname='Fielding' fullname='Roy Fielding'>
+    <organization/>
+</author>
+<date day='14' month='July' year='2010'/>
+</front>
+<format type='HTML' target='http://lists.w3.org/Archives/Public/public-html/2010Jul/0036.html'/>
+</reference>
+
+<reference anchor='5' target='http://www.w3.org/TR/uri-clarification/'>
+<front>
+<title>URIs, URLs, and URNs: Clarifications and Recommendations 1.0</title>
+<author fullname='URI Planning Interest Group'>
+    <organization>W3C</organization>
+</author>
+<date day='21' month='September' year='2001'/>
+</front>
+<seriesInfo name='W3C Note' value='21 September 2001' />
+<format type='HTML' target='http://www.w3.org/TR/uri-clarification/'/>
+</reference>
+
+<reference anchor='6' target='http://code.google.com/p/browsersec/wiki/Part1#Uniform_Resource_Locators'>
+<front>
+<title>Browser Security Handbook: Uniform Resource Locators</title>
+<author initials='M.' surname='Zalewski' fullname='Michal Zalewski'>
+    <organization>Google</organization>
+</author>
+<date day='6' month='March' year='2011'/>
+</front>
+<format type='HTML' target='http://code.google.com/p/browsersec/wiki/Part1#Uniform_Resource_Locators'/>
+</reference>
+
+<reference anchor='7' target='https://docs.google.com/document/d/1c8-svx7og0qBUfGBobw7LYfOcNeDVPYbNVMNpSqYCFo/edit?hl=en&pli=1'>
+<front>
+<title>URLs</title>
+<author initials='M.' surname='Davis' fullname='Mark Davis'>
+    <organization>Google</organization>
+</author>
+<date day='5' month='May' year='2011'/>
+</front>
+<format type='HTML' target='https://docs.google.com/document/d/1c8-svx7og0qBUfGBobw7LYfOcNeDVPYbNVMNpSqYCFo/edit?hl=en&pli=1'/>
 </reference>
 
     </references>
